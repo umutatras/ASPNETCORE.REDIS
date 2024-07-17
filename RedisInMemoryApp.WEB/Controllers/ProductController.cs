@@ -20,7 +20,11 @@ namespace RedisInMemoryApp.WEB.Controllers
             }
 			if(!_memoryCache.TryGetValue("zaman",out  string zaman))
 			{
-                _memoryCache.Set<string>("zaman", DateTime.Now.ToString());
+				//geçerlilik süresi oluşturma sınıfı
+				MemoryCacheEntryOptions options = new MemoryCacheEntryOptions();
+				options.AbsoluteExpiration=DateTime.Now.AddSeconds(30);
+				options.SlidingExpiration=TimeSpan.FromSeconds(30);
+                _memoryCache.Set<string>("zaman", DateTime.Now.ToString(), options);
 
             }
             //değeri set etme key value şeklindedir.
