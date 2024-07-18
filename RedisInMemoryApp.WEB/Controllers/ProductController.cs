@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using RedisInMemoryApp.WEB.Models;
 
 namespace RedisInMemoryApp.WEB.Controllers
 {
@@ -34,6 +35,8 @@ namespace RedisInMemoryApp.WEB.Controllers
                 _memoryCache.Set<string>("zaman", DateTime.Now.ToString(), options);
 
             }
+			Product p = new Product { Id = 1, Name = "Kalem", Price = 5 };
+			_memoryCache.Set<Product>("product:1", p);
             //değeri set etme key value şeklindedir.
             _memoryCache.Set<string>("zaman", DateTime.Now.ToString());
 			return View();
@@ -48,6 +51,7 @@ namespace RedisInMemoryApp.WEB.Controllers
 			});
 			_memoryCache.TryGetValue("callback", out string callback);
 			ViewBag.callback = callback;
+			ViewBag.product = _memoryCache.Get<Product>("product:1");
 			//bellekteki veriyi silmeyi sağlar
 			_memoryCache.Remove("zaman");
 			//veriyi çekme gösterme
