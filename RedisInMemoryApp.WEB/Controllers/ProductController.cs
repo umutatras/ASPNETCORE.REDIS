@@ -26,6 +26,11 @@ namespace RedisInMemoryApp.WEB.Controllers
 				options.SlidingExpiration=TimeSpan.FromSeconds(30);
 
 				options.Priority = CacheItemPriority.High;
+
+				options.RegisterPostEvictionCallback((key, value, reason, state) =>
+				{
+					_memoryCache.Set("callback", $"{key}->{value}=>sebep:{reason}");
+				});
                 _memoryCache.Set<string>("zaman", DateTime.Now.ToString(), options);
 
             }
@@ -41,7 +46,8 @@ namespace RedisInMemoryApp.WEB.Controllers
 			{
 				return DateTime.Now.ToString();
 			});
-
+			_memoryCache.TryGetValue("callback", out string callback);
+			ViewBag.callback = callback;
 			//bellekteki veriyi silmeyi sağlar
 			_memoryCache.Remove("zaman");
 			//veriyi çekme gösterme
