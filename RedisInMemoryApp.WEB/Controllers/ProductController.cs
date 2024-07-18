@@ -24,6 +24,8 @@ namespace RedisInMemoryApp.WEB.Controllers
 				MemoryCacheEntryOptions options = new MemoryCacheEntryOptions();
 				options.AbsoluteExpiration=DateTime.Now.AddSeconds(30);
 				options.SlidingExpiration=TimeSpan.FromSeconds(30);
+
+				options.Priority = CacheItemPriority.High;
                 _memoryCache.Set<string>("zaman", DateTime.Now.ToString(), options);
 
             }
