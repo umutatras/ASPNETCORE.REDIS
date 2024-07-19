@@ -14,6 +14,9 @@ namespace IDistributedCacheRedisApp.WEB.Controllers
 
         public IActionResult Index()
         {
+            DistributedCacheEntryOptions options = new DistributedCacheEntryOptions();
+            options.AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(1);
+            _cache.SetString("name", "UMUT", options);
             return View();
         }
     }
