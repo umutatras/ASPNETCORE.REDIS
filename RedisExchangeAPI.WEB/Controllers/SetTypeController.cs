@@ -13,11 +13,24 @@ namespace RedisExchangeAPI.WEB.Controllers
         {
             _redisService = redisService;
         }
-
+        public IActionResult DeleteItem(string name)
+        {
+            GetDb().SetRemove(listKey, name);
+            return RedirectToAction("Index");
+        }
         public IActionResult Index()
         {
+            HashSet<string> keys = new HashSet<string>();
+            if(GetDb().KeyExists(listKey))
+            {
+                foreach (var item in GetDb().SetMembers(listKey).ToList())
+                {
+                    keys.Add(item.ToString());
 
-            return View();
+                }
+            }
+           
+            return View(keys);
         }
         [HttpPost]
         public IActionResult Add(string name)

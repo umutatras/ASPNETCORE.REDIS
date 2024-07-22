@@ -3,3 +3,16 @@
 *@
 @{
 }
+@model HashSet<string>
+
+
+<form method="post" asp-action="Add" asp-controller="SetType" enctype="application/x-www-form-urlencoded">
+    <input type="text" name="name" />
+    <button type="submit">Kaydet</button>
+</form>
+
+@foreach (var item in Model)
+{
+    <li>@item</li>
+    <li><a href="/SetType/Delete/@item"></a></li>
+}
