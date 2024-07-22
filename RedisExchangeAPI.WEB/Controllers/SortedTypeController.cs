@@ -45,7 +45,7 @@ namespace RedisExchangeAPI.WEB.Controllers
             GetDb().SortedSetAdd(listKey,name,score);
             return RedirectToAction("Index");
         }
-        private IDatabase GetDb()
+        public IDatabase GetDb()
         {
             return _redisService.GetDb(1);
         }
