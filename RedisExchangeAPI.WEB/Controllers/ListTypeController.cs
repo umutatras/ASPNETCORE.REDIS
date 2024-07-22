@@ -15,19 +15,32 @@ namespace RedisExchangeAPI.WEB.Controllers
 
         public IActionResult Index()
         {
-            var db=GetDb();
-            return View();
+            List<string> namesList = new List<string>();
+
+            var db = GetDb();
+            if (db.KeyExists(listKey))
+            {
+                foreach (var item in db.ListRange(listKey).ToList())
+                {
+                    namesList.Add(item.ToString());
+                };
+            }
+            return View(namesList);
         }
         [HttpPost]
         public IActionResult Add(string name)
         {
-            GetDb().ListRightPush(listKey,name);
-            return View();  
+            GetDb().ListRightPush(listKey, name);
+            return View();
+        }        
+        public IActionResult DeleteItem(string name)
+        {
+            GetDb().ListRemove(listKey, name);
+            return RedirectToAction("Index");
         }
-
         private IDatabase GetDb()
         {
-           return _redisService.GetDb(1);
+            return _redisService.GetDb(1);
         }
     }
 }
