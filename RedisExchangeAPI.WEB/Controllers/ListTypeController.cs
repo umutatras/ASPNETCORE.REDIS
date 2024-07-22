@@ -38,6 +38,11 @@ namespace RedisExchangeAPI.WEB.Controllers
             GetDb().ListRemove(listKey, name);
             return RedirectToAction("Index");
         }
+        public IActionResult DeleteFirsItem()
+        {
+            GetDb().ListLeftPop(listKey);
+            return RedirectToAction("Index");
+        }
         private IDatabase GetDb()
         {
             return _redisService.GetDb(1);
