@@ -1,12 +1,25 @@
 using RedisExchangeAPI.WEB.Services;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<RedisService>(sp => new RedisService(builder.Configuration));
+builder.Services.AddSingleton<RedisService>(s=>new RedisService(builder.Configuration));
 
 var app = builder.Build();
+
+using (var serviceScope = app.Services.CreateScope())
+
+{
+
+    var services = serviceScope.ServiceProvider;
+
+    var redisService = services.GetRequiredService<RedisService>();
+
+    redisService.Connect();
+
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
