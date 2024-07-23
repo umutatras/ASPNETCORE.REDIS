@@ -16,7 +16,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 builder.Services.AddScoped<IProductRepository,ProductRepository>();
 var app = builder.Build();
-
+using var scope = app.Services.CreateScope();
+var dbContext=scope.ServiceProvider.GetRequiredService<DbContext>();
+dbContext.Database.EnsureCreated();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
