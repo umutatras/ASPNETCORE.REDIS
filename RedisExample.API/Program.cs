@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RedisExample.API.Models;
+using RedisExample.API.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseInMemoryDatabase("mydatabase");
 });
+builder.Services.AddScoped<IProductRepository,ProductRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
