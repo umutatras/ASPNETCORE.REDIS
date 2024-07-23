@@ -41,9 +41,15 @@ namespace RedisExample.API.Repository
         }
        
 
-        public Task<Product> GetByIdAsync(int id)
+        public async Task<Product> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            if(_cacheRepository.KeyExists(productKey))
+            {
+                var product=await _cacheRepository.HashGetAsync(productKey, id);
+                return product.HasValue ? JsonSerializer.Deserialize<Product>(product) : null;
+            }
+            var products = await LoadToCacheFromDbAsync();
+            return products.FirstOrDefault(x => x.Id == id);
         }
         private async Task<List<Product>> LoadToCacheFromDbAsync()
         {
