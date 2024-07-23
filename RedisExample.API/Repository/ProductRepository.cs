@@ -1,4 +1,5 @@
-﻿using RedisExample.API.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using RedisExample.API.Models;
 
 namespace RedisExample.API.Repository
 {
@@ -11,19 +12,21 @@ namespace RedisExample.API.Repository
             _context = context;
         }
 
-        public Task<Product> CreateAsync(Product product)
+        public async Task<Product> CreateAsync(Product product)
         {
-            throw new NotImplementedException();
+            await _context.Products.AddAsync(product);
+            await _context.SaveChangesAsync();
+            return product;
         }
 
-        public Task<List<Product>> GetAsync()
+        public async Task<List<Product>> GetAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Products.ToListAsync();
         }
 
-        public Task<Product> GetByIdAsync(int id)
+        public async Task<Product> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return  await _context.Products.FindAsync(id);
         }
     }
 }
