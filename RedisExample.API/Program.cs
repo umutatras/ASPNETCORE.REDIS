@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RedisExample.API.Models;
 using RedisExample.API.Repository;
+using RedisExample.API.Services;
 using RedisExampleApp.Cache;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,7 @@ builder.Services.AddScoped<IProductRepository>(sp =>
     var redisService = sp.GetRequiredService<RedisService>();
     return new ProductRepositoryWithCache(productRepository,redisService);
 });
+builder.Services.AddScoped<IProductService, ProductService>();  
 builder.Services.AddSingleton<RedisService>(sp =>
 {
     return new RedisService(builder.Configuration["CacheOptions:Url"]);
